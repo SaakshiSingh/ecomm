@@ -63,7 +63,7 @@ class DiaryForm(ModelForm):
 	#content = forms.CharField(widget=forms.Textarea(attrs={'id':'diaryContent','class':'form-control colorValue','rows':'10','cols':'80',}))
 	content = forms.CharField(widget=CKEditorWidget(attrs={
 		'rows':'10'}))
-	picture = forms.ImageField(widget = forms.ClearableFileInput(attrs={
+	picture = forms.ImageField(widget = forms.FileInput(attrs={
 		'id':'picture','class':'form-control form-control-sm'}))
 
 class DateInput(forms.DateInput):
