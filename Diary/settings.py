@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'multiselectfield',
     'django_celery_beat',
+    'storages',
     
 
 ]
@@ -158,9 +159,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-EMAIL_HOST_USER = 'ashi.saakshi@gmail.com'
-EMAIL_HOST_PASSWORD = 'mydish@123'
-
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
 CELERY_IMPORTS = ('Account.task',)
@@ -173,3 +173,16 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY  = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = 'ap-south-1' 
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
