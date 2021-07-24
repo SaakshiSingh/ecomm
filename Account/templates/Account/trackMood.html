@@ -1,0 +1,297 @@
+
+{%extends 'Account/base.html' %}
+
+{%block content%}
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    {%for message in messages%}
+    <div class="alert alert-primary alert-dismissible fade show mt-2 " role="alert" style="width: fit-content;margin-left:550px">
+       {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    {%endfor%}
+   
+<div class="moodHeading m-4 ">
+  Tell Us How Do You Feel Today ????
+</div>
+<div class="container-fluid">
+	<form method="POST" action="" enctype='multipart/form-data' id = "mood-form">
+		{%csrf_token%}
+		
+		
+    {% for value, text in form.type_of_mood.field.choices %}
+      <span class="form-check form-check-inline labels">
+        <input class = "form-check-input" id="id_type_of_mood_{{ forloop.counter0 }}" name="{{ form.type_of_mood.name }}" type="checkbox" value="{{ value }}"{% if value in checked_type_of_mood %} checked="checked"{% endif %}>
+        <label class ="form-check-label" for = "id_type_of_mood_{{ forloop.counter0 }}">{{ text }}</label>
+      </span>
+    {% endfor %}
+  
+    <div class="row mt-4">
+      <div class="col-12"style="font-family:'Yomogi', cursive; 
+    color: #2F5061; font-weight: bold; font-size: 20px;text-align: center;">
+        Mention Date:
+        {{form.dateTime}}
+      </div>
+  </div>
+        <div class="box">
+            <div class="box-inside justify-content-center">
+               <a role ="button" class ="btn btn-outline-danger mt-3"href="{% url 'userpage'%}">Cancel</a>
+               <button id ="submit_btn"  type="submit" name="Create Diary" class="btn btn-outline-secondary mt-3">Submit</button>
+            </div>
+        </div>
+	</form>
+</div>
+<div class="mt-2 moodHeading">
+  <h1>Mood Records</h1>
+</div>
+
+<div class="container-fluid">	
+	<div class="row">	
+	<div class="col">	
+		<div id="moodChart" class = "moodchart search">
+        <form method="GET" class="mt-4 mx-2">
+          <span class=""> <strong>Filter Graphs for dates greater than : </strong></span>
+        {{dateForm.date}}
+          <button type="submit" name="submit" class="btn-sm btn-outline-danger">Submit</button>
+        </form>
+		</div>
+	</div>
+	<div class="col ">	
+		<div id="moodPie" class = "moodchart">
+			
+		</div>
+	</div>
+</div>
+</div>
+
+
+<script>
+  $.ajax({
+    method:'GET',
+    url:"{% url 'mood-chart' %}",
+    success:function(data){
+        console.log(data.labels)
+        var chartData ={
+        "type":"bar",
+        
+        "background-color": "white",
+        "title": {
+          "text": "Mood Chart",
+          "font-color": "#7E7E7E",
+          "backgroundColor": "none",
+          "font-size": "22px",
+          "alpha": 1,
+          "adjust-layout": true,
+        },
+        "plot": {
+          "bars-space-left": 0.15,
+          "bars-space-right": 0.15,
+          "animation": {
+            "effect": "ANIMATION_SLIDE_BOTTOM",
+            "sequence": 0,
+            "speed": 800,
+            "delay": 800
+          }
+        },
+        "scale-y": {
+          "line-color": "#7E7E7E",
+          "item": {
+            "font-color": "#7e7e7e"
+          },
+          
+          "label": {
+            "text": "Count",
+            "font-family": "arial",
+            "bold": true,
+            "font-size": "14px",
+            "font-color": "#7E7E7E",
+            
+          },
+          
+        },
+        "scale-x":{
+
+          "label": { /* Scale Title */
+            "text": "Moods",
+            "font-size":"20px",
+             "offsetY": 5,
+          },
+           "item": {
+        "rules": [
+          {
+            "rule": '%i%2 == 0',
+            "offsetY":13,
+          }  
+        ]
+      },
+          "font-size":"10px",
+          "labels":data.labels,
+          "items-overlap":true,
+		      "max-items":20
+        },
+
+        "series":[
+        { 
+            "alpha": 0.8,
+            "background-color": "#B99095",
+            "values":data.data,
+
+        }],
+       } 
+
+
+       var chartHeatMapData = {
+      "type": "heatmap",
+      "title": {
+          text: 'Moods for last 7 days',
+          adjustLayout: true,
+          fontColor: '#05636c',
+          fontSize: '24px',
+          paddingTop:"10px"
+        },
+      "scale-x":{
+
+        "item": {
+        "rules": [
+          {
+            "rule": '%i%2 == 0',
+            "offsetY":13,
+          }  
+        ]
+      },
+      "items-overlap":true,
+        "max-items":10,
+        "label": {
+            "text": "Dates",
+            "font-family": "arial",
+            "bold": true,
+            "font-size": "24px",
+            "font-color": "#7E7E7E",
+            "paddingTop":"16px",
+            
+          },
+        "labels":data.date_list,
+        "guide" : {              //Plot Lines
+            "visible": false
+          },
+        "tick" : {               //Tick Marks
+          "visible": true
+          },
+      },
+      "scale-y": {
+        
+        "items-overlap":true,
+        "max-items":20,
+        "guide" : {              //Plot Lines
+            "visible": false
+          },
+          "tick" : {               //Tick Marks
+          "visible": false
+          },
+          "labels": [ "Happy", "Sad", " Anxious","Calm","Relaxed","Angry","Fearful","Depressed",
+          "Lonely","Surprised","Annoyed","Nervous","Sick","Sleepy","Excited","Stressed","Grumpy","Scared","Bored" ]
+        
+
+      },
+      "tooltip":{
+        "rules":[{
+          "rule": '%v == 0',
+          "text": 'NO',
+        },
+        {
+          "rule": '%v == 1',
+          "text": 'YES',
+        },
+        ]
+
+          
+
+        },
+      "series": [{
+          "values": data.final_list[0]
+        },
+        {
+          "values": data.final_list[1]
+        },
+        {
+          "values": data.final_list[2]
+        },
+        {
+          "values": data.final_list[3]
+        },
+        {
+          "values": data.final_list[4]
+        },
+        {
+          "values": data.final_list[5]
+        },
+        {
+          "values": data.final_list[6]
+        },
+        {
+          "values": data.final_list[7]
+        },
+        {
+          "values": data.final_list[8]
+        },
+        {
+          "values": data.final_list[9]
+        },
+        {
+          "values": data.final_list[10]
+        },
+        {
+          "values": data.final_list[11]
+        },
+        {
+          "values": data.final_list[12]
+        },
+        {
+          "values": data.final_list[13]
+        },
+        {
+          "values": data.final_list[14]
+        },
+        {
+          "values": data.final_list[15]
+        },
+        {
+          "values": data.final_list[16]
+        },
+        {
+          "values": data.final_list[17]
+        },
+        {
+          "values": data.final_list[18]
+        },
+      ]
+    };
+       zingchart.render({
+        id: 'moodChart',
+        data: chartData,
+      });
+
+       zingchart.render({
+        id: 'moodPie',
+        data: chartHeatMapData,
+        
+      });
+
+          
+      }
+
+      
+
+  })
+   
+
+   
+</script>
+
+
+
+
+{%endblock%}

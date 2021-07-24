@@ -1,0 +1,183 @@
+{% extends 'Account/base.html'%}
+{% load static%}
+
+
+{%block content%}
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+<section>
+
+    {%for message in messages%}
+    <div class="alert alert-primary alert-dismissible fade show mt-2 " role="alert" style="width: fit-content;margin-left:550px">
+       {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    {%endfor%}
+   
+
+  <div class="userpage-background">
+    <div class="text ">
+      <div>
+        <span>LET YOUR HANDS PEN DOWN </span>
+      </div>
+      <div>
+        <span>WHAT YOUR HEART THINKS...</span>
+      </div>
+
+      <a href="{%url 'creatediary' %}" class="btn  btn-secondary mt-4 fs-6" role="button"></i>Write Diary</a>
+
+
+    </div>
+  </div>
+</section>
+<div id="diaryChart" class = "chart search">
+
+  
+</div>
+
+<section>
+  <div class="small_heading">
+    <div class="text">
+      Diaries written so far : {{total_diary}}
+    </div>
+  </div>
+  <h5 class="mt-3 ms-2">Search Your Diaries By :</h5>
+  <form method="GET">
+    <div class="row">
+      <div class="col-3 ms-1">
+        {{myFilter.form.title}}
+      </div>
+      <div class="col-3 ms-1">
+        {{myFilter.form.content}}
+      </div>
+      <div class="col-3 ms-1">
+        
+        <div class="form-group">
+          <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+            {{myFilter.form.date}}
+            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="bi bi-calendar3"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 ms-1">
+        <button type="submit" name="submit" class="btn btn-info">Submit</button>
+      </div>
+    </div>
+
+    
+    
+  </form>
+  
+  <div class="row mt-4 mx-5">
+    {%for item in diary%}
+      <div class="col-sm-3 mx-5 mb-2">
+        <div class="card text-center" >
+          <img src="{{item.picture.url}}" class="card-img-top" alt="Photo journal"style="max-height: 200px;">
+          <div class="card-body">
+            <h5 class="card-title">{{item.title}}</h5>
+            <div>
+              <small>Created on :{{item.dateCreated|date:"d F o"}} {{item.dateModified|time:"f A"}}</small>
+            </div>
+            <div>
+              <small>Last Modified :{{item.dateModified|date:"d F o"}} {{item.dateModified|time:"f A"}}</small>
+            </div>
+            <div>
+              <a href="{%url 'updatediary' item.id %}" class="btn btn-dark fs-5"><i class="bi bi-pencil-square"></i></a>
+              <a  type ="submit" href="{%url 'deletediary' item.id %}" class="btn btn-danger fs-5"><i class="bi bi-trash-fill"></i></a>
+              
+            </div>
+            
+            
+          </div>
+        </div>
+      </div>
+    {%endfor%}
+  </div>
+
+
+</section>
+
+<script>
+
+
+
+
+  $.ajax({
+    method:'GET',
+    url:"{% url 'diary-chart' %}",
+    success:function(data){
+        console.log(data.labels)
+
+        var chartData ={
+        "type":"bar",
+        "utc": true,
+        
+        "background-color": "white",
+        "title": {
+          "text": "Diaries",
+          "font-color": "#7E7E7E",
+          "backgroundColor": "none",
+          "font-size": "22px",
+          "alpha": 1,
+          "adjust-layout": true,
+        },
+        "plot": {
+          "bars-space-left": 0.15,
+          "bars-space-right": 0.15,
+          "animation": {
+            "effect": "ANIMATION_SLIDE_BOTTOM",
+            "sequence": 0,
+            "speed": 800,
+            "delay": 800
+          }
+        },
+        "scale-y": {
+          "line-color": "#7E7E7E",
+          "item": {
+            "font-color": "#7e7e7e"
+          },
+          
+          "label": {
+            "text": "Number of Diaries",
+            "font-family": "arial",
+            "bold": true,
+            "font-size": "14px",
+            "font-color": "#7E7E7E",
+          },
+        },
+        "scale-x":{
+          label: { /* Scale Title */
+            text: "Dates",
+          },
+          "values":data.labels
+        },
+
+        "series":[
+        { label: { /* Scale Title */
+            text: "Number of Diaries",
+          },
+            "alpha": 0.8,
+            "background-color": "#AA1945",
+            
+          "values":data.data
+        }],
+       } 
+
+       zingchart.render({
+        id: 'diaryChart',
+        data: chartData,
+      });
+
+          
+      }
+  })
+   
+
+   
+  </script>
+
+{% endblock%}

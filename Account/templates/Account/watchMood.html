@@ -1,0 +1,25 @@
+
+{%extends 'Account/base.html' %}
+
+{%block content%}
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Moods</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+{%for item in mood_list%}
+ <tbody>
+ 	<tr>
+      <td>{{item.type_of_mood}}</td>
+      <td>{{item.dateTime}}</td>
+      
+    </tr>
+ </tbody>
+{%endfor%}
+
+</table>
+{%endblock%}

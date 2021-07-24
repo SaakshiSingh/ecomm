@@ -1,0 +1,52 @@
+
+{%extends 'Account/base.html' %}
+
+{%block content%}
+
+<div class="box-container">
+	<strong class = "logo "style="font-size:50px">MOODIARY</strong>
+	<form method="POST" action="" class="">
+		{%csrf_token%}
+		<div class="form-floating mb-3">
+		  <input type="text" class="form-control" id="floatingInput" placeholder="username" name = "username">
+		  <label for="floatingInput">Enter Username</label>
+		</div>
+		<div class="form-floating mb-3">
+		  <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name = "password">
+		  <label for="floatingPassword">Enter Password</label>
+		</div>
+		<div class="d-flex justify-content-center mt-4">
+			<button type="submit" name="Login" class="btn btn-secondary">Login</button>
+		</div>
+		<div class="d-flex justify-content-center mt-2">
+						<small>Don't have an account? <a class="link" href="{% url 'register' %}" >Sign Up</a></small>
+		</div>
+		<div class="d-flex justify-content-center mt-1">
+			<small>
+				<a class = "link"href="{%url 'password_reset'%}" >Forgot password?</a>
+			</small>
+		</div>
+
+		{% if messages %}
+	        {% for message in messages %}
+	        {% if message.tags == "error"%}
+		        <div class="alert alert-danger m-3 p-1" role="alert">
+	  				{{ message }}
+				</div>
+			{%else%}
+				<div class="alert alert-success m-3 p-1" role="alert">
+	  				{{ message }}
+				</div>
+	        {%endif%}
+
+	        
+	            
+	        {% endfor %}
+	            
+	    {% endif %}
+
+		
+	</form>
+</div>
+
+{%endblock%}

@@ -1,0 +1,53 @@
+{% extends 'Account/base.html'%}
+{% load static%}
+
+
+{%block content%}
+<div class="container-fluid">
+  <form method="POST" action="" enctype='multipart/form-data'>
+    {%csrf_token%}
+    <div class="titleDisplay mt-2">
+      <div class="row">
+        <div class="col-8">
+          <div class="title mb-8">
+            <label for="diaryTitle" class="form-label text-light ">TITLE</label>
+            {{form.title}}
+          </div>
+        </div>
+        <div class="col">
+          {%if update == 'false' %}
+          <div class="picture mb-4">
+            <label for="{{form.picture.id_for_label}}">Photo record</label>
+            {{form.picture}}
+          </div>
+          {%else%}
+          <div class="update-picture">
+            <label for="{{form.picture.id_for_label}}">Photo record</label>
+            {{form.picture}}
+          </div>
+          {%endif%}
+          
+        </div>
+      </div>
+    </div>
+      <br>
+
+      <div class="mt-2 ">
+        {{ form.media }}
+        {{form.content}} 
+      </div>
+      
+    <a role ="button" class ="btn btn-info mt-3"href="{% url 'userpage'%}">Cancel</a>
+
+    <button type="submit" name="Create Diary" class="btn btn-secondary mt-3 ">Submit</button>
+</form>
+
+</div>
+
+
+{% endblock%}
+
+
+
+
+

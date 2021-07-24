@@ -1,0 +1,44 @@
+
+{%extends 'Account/base.html' %}
+
+{%block content%}
+
+<div class="box-container">
+	<strong class = "logo "style="font-size:50px">MOODIARY</strong>
+	<form method="POST" action="" class="">
+		{%csrf_token%}
+		{{form.non_field_errors}}
+		<div class="form-floating mb-3">
+			{{form.username}}
+			<label for="floatingUsername">Username</label>
+		</div>
+		<div class="form-floating mb-3">
+			{{form.email}}
+			<label for="floatingEmail">Email Address</label>
+		</div>
+		<div class="form-floating mb-3">
+			{{form.password1}}
+			<label for="floatingPass1">Password</label>
+		</div>
+		<div class="form-floating mb-3">
+			{{form.password2}}
+			<label for="floatingPass2">Confirm Password</label>
+		</div>
+
+		<div class="d-flex justify-content-center m-1">
+			<small>Already have an Account??
+				<a class = "link"href="{%url 'login'%}" >Login</a>
+			</small>
+		</div>
+		{% for field, error in form.errors.items %}
+        <div class="alert alert-danger my-3 p-1" role="alert">
+            {{ error|striptags }}
+        </div>
+        {% endfor %}
+		
+	    
+		<button type="submit" name="Create Account" class="btn btn-secondary">Submit</button>
+	</form>
+</div>
+
+{%endblock%}
