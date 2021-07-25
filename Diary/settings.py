@@ -164,9 +164,10 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
 CELERY_IMPORTS = ('Account.task',)
-
-CELERY_BROKER_URL = 'amqps://uysdgien:QxT1nMbplqsn8b3vlReiyF5gMaEVLAqy@baboon.rmq.cloudamqp.com/uysdgien'
-CELERY_RESULT_BACKEND = 'amqps://uysdgien:QxT1nMbplqsn8b3vlReiyF5gMaEVLAqy@baboon.rmq.cloudamqp.com/uysdgien'
+BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
+BROKER_POOL_LIMIT = 1
+CELERY_BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
+CELERY_RESULT_BACKEND = os.environ.get("REDISCLOUD_URL", "django://")
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
