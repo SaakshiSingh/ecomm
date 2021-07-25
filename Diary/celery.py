@@ -21,7 +21,7 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'reminder-':{
-        'task':'Account.task.send_notification',
+        'task':'Account.tasks.send_notification',
         'schedule':crontab(minute='*/1'),
         
     }
