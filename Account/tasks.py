@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from celery import shared_task
 
-@app.task
+@app.task(name='send_notification')
 def send_notification():
 	from django.contrib.auth.models import User
 	try:

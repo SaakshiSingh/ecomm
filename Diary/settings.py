@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'Account.apps.AccountConfig',
     'django_filters',
     'ckeditor',
@@ -46,10 +45,8 @@ INSTALLED_APPS = [
     'multiselectfield',
     'django_celery_beat',
     'storages',
-    
-
 ]
-SITE_ID =1
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -165,6 +162,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
 CELERY_IMPORTS = ('Account.tasks',)
+
 BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
 BROKER_POOL_LIMIT = 1
 CELERY_BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
@@ -173,7 +171,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = os.environ.get("REDISCLOUD_URL", "django://")
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
