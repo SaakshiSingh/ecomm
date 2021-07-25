@@ -44,9 +44,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'multiselectfield',
     'django_celery_beat',
-    'django_celery_results',
     'storages',
-
     
 
 ]
@@ -166,15 +164,14 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
 CELERY_IMPORTS = ('Account.task',)
-CELERY_BROKER_URL = 'amqps://uysdgien:QxT1nMbplqsn8b3vlReiyF5gMaEVLAqy@baboon.rmq.cloudamqp.com/uysdgien'
-#CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-#CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'amqps://uysdgien:QxT1nMbplqsn8b3vlReiyF5gMaEVLAqy@baboon.rmq.cloudamqp.com/uysdgien'
-CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
-BROKER_POOL_LIMIT = 3
+
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
@@ -206,7 +203,4 @@ AWS_S3_FILE_OVERWRITE = False
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-
-
 django_heroku.settings(locals())
-
