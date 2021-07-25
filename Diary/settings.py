@@ -163,16 +163,16 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
-CELERY_IMPORTS = ('Account.tasks',)
+CELERY_IMPORTS = ['Account.tasks']
 BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
 BROKER_POOL_LIMIT = 1
 CELERY_BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
-CELERY_RESULT_BACKEND = os.environ.get("REDISCLOUD_URL", "django://")
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
+CELERY_RESULT_BACKEND = 'django-db'
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
