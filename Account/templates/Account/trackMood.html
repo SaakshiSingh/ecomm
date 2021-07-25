@@ -42,24 +42,32 @@
   <h1>Mood Records</h1>
 </div>
 
-<div class="container-fluid">	
-	<div class="row">	
-	<div class="col">	
-		<div id="moodChart" class = "moodchart search">
-        <form method="GET" class="mt-4 mx-2">
+<form method="GET" class="mt-4 mx-2">
           <span class=""> <strong>Filter Graphs for dates greater than : </strong></span>
         {{dateForm.date}}
           <button type="submit" name="submit" class="btn-sm btn-outline-danger">Submit</button>
         </form>
-		</div>
-	</div>
-	<div class="col ">	
-		<div id="moodPie" class = "moodchart">
-			
-		</div>
-	</div>
+{%if search%}
+<div class="container-fluid"> 
+  <div class="row"> 
+  <div class="col"> 
+    <div id="moodChart" class = "moodchart search">
+        
+    </div>
+  </div>
+  <div class="col ">  
+    <div id="moodPie" class = "moodchart">
+      
+    </div>
+  </div>
 </div>
 </div>
+{%endif%}
+
+
+
+
+
 
 
 <script>

@@ -195,22 +195,24 @@ def track_mood(request):
 	else:
 		form = MoodForm()
 
+	search = False
 	if request.method == 'GET':
 		dateForm = DateInputForm(request.GET)
 		if dateForm.is_valid():
+			search = True
 			date = dateForm.cleaned_data['date']
 			request.session['date'] = str(date)
 	
 	
 	
-	context={'form':form,'dateForm':dateForm}
+	context={'form':form,'dateForm':dateForm,'search':search}
 
 	return render(request,'Account/trackMood.html',context)
 
 def mood_chart(request):
 	mood = request.user.customer.mood_set.all()
-	mymood = mood.order_by('dateTime')
-	firstMoodDate =mymood[0].dateTime
+	#mymood = mood.order_by('dateTime')
+	
 	
 	if(request.session['date']):
 		sDate = request.session['date']
@@ -230,7 +232,7 @@ def mood_chart(request):
 	heat_mood_list=[]
 	for i in date_list:
 		mood_list=[]
-		for j in mymood.filter(dateTime = i):
+		for j in mood.filter(dateTime = i):
 			for k in j.type_of_mood :
 				mood_list.append(k)
 		mood_set = set(mood_list)
