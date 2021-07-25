@@ -163,7 +163,7 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
-CELERY_IMPORTS = ['Account.tasks']
+CELERY_IMPORTS = ('Account.tasks',)
 BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
 BROKER_POOL_LIMIT = 1
 CELERY_BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
