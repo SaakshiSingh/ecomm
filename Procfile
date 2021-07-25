@@ -1,5 +1,5 @@
 web: gunicorn Diary.wsgi
-worker: celery -A Diary worker -l INFO
+worker: celery -A Diary worker -l INFO --beat
 beat: celery -A Diary beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 
