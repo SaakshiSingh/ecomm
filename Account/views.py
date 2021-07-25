@@ -67,18 +67,18 @@ def loginPage(request):
 		username = request.POST.get('username')
 		password = request.POST.get('password')
 		user = authenticate(request,username=username,password=password)
-		if user.username == "user":
-			login(request,user)
-			return redirect('userpage')
-		elif not user.customer.is_email_verified:
-			messages.error(request,'Your Email is not verified please check your mail')
-		elif user is not None:
-			login(request,user)
-			return redirect('userpage')
+		if user is not None:
+			if user.username =="user":
+				login(request,user)
+				return redirect('userpage')
 
-
+			if not user.customer.is_email_verified:
+				messages.error(request,'Your Email is not verified please check your mail')
+			else:
+				login(request,user)
+				return redirect('userpage')
 		else:
-			messages.error(request,'Wrong Username or Password')
+			messages.error(request,"UserName or password is incorrect")
 			
 	context ={}
 	return render(request,'Account/login.html',context)
