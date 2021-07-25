@@ -1,5 +1,5 @@
 web: gunicorn Diary.wsgi
-worker: python manage.py celery worker --loglevel=info
-beat: python manage.py celery beat --loglevel=info
+worker: celery -A Diary worker -l INFO
+beat: celery -A Diary beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 
