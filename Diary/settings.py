@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'Account.apps.AccountConfig',
     'django_filters',
     'ckeditor',
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     
 
 ]
-
+SITE_ID =1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
