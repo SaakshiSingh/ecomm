@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'storages',
+
     
 
 ]
@@ -165,15 +166,15 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 
 CELERY_IMPORTS = ('Account.task',)
-CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+CELERY_BROKER_URL = 'amqps://uysdgien:QxT1nMbplqsn8b3vlReiyF5gMaEVLAqy@baboon.rmq.cloudamqp.com/uysdgien'
 #CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 #CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
+CELERY_RESULT_BACKEND = 'amqps://uysdgien:QxT1nMbplqsn8b3vlReiyF5gMaEVLAqy@baboon.rmq.cloudamqp.com/uysdgien'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
-
+BROKER_POOL_LIMIT = 3
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
@@ -205,16 +206,6 @@ AWS_S3_FILE_OVERWRITE = False
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get('REDIS_URL'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
 
 
 django_heroku.settings(locals())
