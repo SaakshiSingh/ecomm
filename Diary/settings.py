@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'storages',
 ]
+INSTALLED_APPS_WITH_APPCONFIGS = ['Account',]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -156,22 +157,27 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_USER = 'ashi.saakshi@gmail.com'
 
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+EMAIL_HOST_PASSWORD = 'mydish@123'
 
 
 CELERY_IMPORTS = ('Account.tasks',)
 
-BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
-BROKER_POOL_LIMIT = 1
-CELERY_BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
+
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+
+#BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
+#BROKER_POOL_LIMIT = 1
+#CELERY_BROKER_URL = os.environ.get("REDISCLOUD_URL", "django://")
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
-CELERY_RESULT_BACKEND = os.environ.get("REDISCLOUD_URL", "django://")
+#CELERY_RESULT_BACKEND = os.environ.get("REDISCLOUD_URL", "django://")
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
