@@ -23,6 +23,7 @@ class Diary(models.Model):
 	dateModified = models.DateField(auto_now=True)
 	writer = models.ForeignKey(Customer,on_delete = models.CASCADE,null=True)
 	picture = models.ImageField(upload_to="images/",default = "default.png")
+	mood = models.CharField(max_length=200,blank=True,null=True)
 
 	def __str__(self):
 		return str(self.title +" by "+ self.writer.user.username)

@@ -3,7 +3,7 @@ from .models import *
 from .forms import DiaryForm
 # Register your models here.
 
-
+admin.site.register(Customer)
 @admin.register(Diary)
 class DiaryAdmin(admin.ModelAdmin):
 	       
@@ -13,9 +13,6 @@ class DiaryAdmin(admin.ModelAdmin):
 	filter_horizontal = ()
 	list_filter = ()
 	
-admin.site.register(Customer)
-
 @admin.register(Mood)
 class MoodAdmin(admin.ModelAdmin):
-	       
 	list_display = ('type_of_mood','mood_user','dateTime')	

@@ -22,7 +22,7 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from .utils import token_generator
 
-
+import boto3
 @unauntheticated_user
 def home(request):
 	context ={'title':"MooDiary"}
@@ -131,7 +131,14 @@ def create_diary(request):
 		if form.is_valid():
 			obj = form.save(commit=False)
 			obj.writer = request.user.customer
+			image_bytes = request.FILES['picture'].read()
+			
+			client = boto3.client('rekognition', region_name='ap-south-1')
+			response = client.detect_faces(Image={'Bytes': image_bytes},Attributes=['ALL'])
+			mood = max(response['FaceDetails'][0]['Emotions'],key=lambda x: x['Confidence'])['Type']
+			obj.mood = mood
 			obj.save()
+			
 			messages.success(request,'Diary Created')
 			return redirect('userpage')
 	else:
@@ -181,6 +188,15 @@ class VerificationView(View):
 			user.customer.save()
 		
 		return redirect('login')
+@login_required(login_url ='login')		
+def watch_mood(request):
+	moods = request.user.customer.mood_set.all()
+	total = moods.count()
+	print(moods)
+
+	context={'moods':moods,'total':"hey",}
+	return render(request,'Account/watchMood.html',context)
+
 
 @login_required(login_url ='login')
 def track_mood(request):

@@ -77,5 +77,7 @@ class MoodForm(ModelForm):
 
 	
 
+	
+
 class DateInputForm(forms.Form):
 	date = forms.DateField(widget = DateInput)

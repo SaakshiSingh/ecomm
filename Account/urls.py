@@ -16,6 +16,7 @@ urlpatterns = [
     path('diarychart/', views.diary_chart, name='diary-chart'),
     path('moodchart/', views.mood_chart, name='mood-chart'),
     path('trackmood/',views.track_mood,name="trackmood"),
+    path('watchMood/',views.watch_mood,name="watchMood"),
     path('activate/<uidb64>/<token>',views.VerificationView.as_view(),name="activate"),
     path('reset_password/',
         auth_views.PasswordResetView.as_view(template_name = "Account/registration/password_reset.html",
