@@ -154,8 +154,15 @@ def update_diary(request,pk):
 	if request.method == 'POST':
 		form = DiaryForm(request.POST,request.FILES,instance = diary)
 		if form.is_valid():
+			obj = form.save(commit=False)
+			image_bytes = request.FILES['picture'].read()
 			
-			form.save()
+			client = boto3.client('rekognition', region_name='ap-south-1')
+			response = client.detect_faces(Image={'Bytes': image_bytes},Attributes=['ALL'])
+			mood = max(response['FaceDetails'][0]['Emotions'],key=lambda x: x['Confidence'])['Type']
+			obj.mood = mood
+			obj.save()
+			
 			messages.success(request,'Diary Updated')
 			return redirect('userpage')
 
