@@ -21,7 +21,7 @@ MooDiary implements Amazon's Rekognition Machine Learning.
   <li>Django</li>
   <li>ZingChart</li>
   <li>Amazon Rekognition Machine Learning API</li>
-  <li> AWS (Amazon Web Services) S3 Buckets foe storage </li>
+  <li> AWS (Amazon Web Services) S3 Buckets for storage </li>
   <li> Heroku for deployment</li>
 </ul  
 
