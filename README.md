@@ -10,6 +10,8 @@ MooDiary implements Amazon's Rekognition Machine Learning, and use ZingChart for
 
 <h4>Sendng Daily Reminders to write Diary using Celery</h4>
 <h4>CRUD Functionality</h4>
+<h4>Storing the media on AWS Buckets</h4>
+<h4>Beautify your Diary Content using CkEditor</h4>
 
 <h3>Technology / Library Used</h3>
 <ul>  
