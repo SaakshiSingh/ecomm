@@ -3,13 +3,14 @@ from django.contrib.auth.models import User
 from .models import Customer
 
 
+
 def create_customer(sender,instance,created,**kwargs):
 	if created:
 		Customer.objects.create(
 				user=instance)
-		
-		
-		print("Profile created !!! ")
+	instance.customer.save()
 
 post_save.connect(create_customer,sender=User)
+
+
 

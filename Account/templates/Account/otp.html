@@ -1,0 +1,27 @@
+
+{%extends 'Account/base.html' %}
+
+{%block content%}
+
+<div class="box-container">
+	<strong class = "logo "style="font-size:50px">MOODIARY</strong>
+	<form method="POST" >
+		{%csrf_token%}
+		<h6>Enter otp send to {{phone}}</h6>
+		<div class="form-floating mb-3">
+		  <input name = "otp"type="text" class="form-control" id="otp" placeholder="Enter OTP">
+		  <label for="otp">Enter OTP</label>
+		</div>
+		<button type="submit" name="Accept OTP" class="btn btn-secondary">Submit</button>
+
+		{% if messages %}
+	        {% for message in messages %}
+		        <div class="alert alert-danger m-3 p-1" role="alert">
+	  				{{ message }}
+				</div>
+	        {% endfor %}
+	    {% endif %}
+	</form>
+</div>
+
+{%endblock%}

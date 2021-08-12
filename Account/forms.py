@@ -10,6 +10,10 @@ from django.utils.translation import gettext as _
 from django.contrib.auth import password_validation
 from django.contrib.admin.widgets import AdminDateWidget,AdminTimeWidget
 
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+
+
 class CustomerSetPasswordForm(SetPasswordForm):
     def __init__(self, *args, **kwargs):
         super(CustomerSetPasswordForm, self).__init__(*args, **kwargs)
@@ -40,19 +44,26 @@ class CustomerPasswordResetForm(PasswordResetForm):
 
 
 class CreateUserForm(UserCreationForm):
-	class Meta:
-		model = User
-		fields = ['username','email','password1','password2']
+	
 	username = forms.CharField(widget = forms.TextInput(attrs={
 		'id':'floatingUsername','class':'form-control ','placeholder':'UserName'}))
 	email = forms.CharField(widget=forms.EmailInput(attrs={
-		'id':'floatingEmail','class': 'form-control ','placeholder':'UserName'}))
-	password1 = forms.CharField(widget=forms.PasswordInput(attrs={
-		'id':'floatingPass1','class': 'form-control ','placeholder':'UserName'}))
-	password2 = forms.CharField(widget=forms.PasswordInput(attrs={
-		'id':'floatingPass2','class': 'form-control ','placeholder':'UserName'}))
-
+		'id':'floatingEmail','class': 'form-control ','placeholder':'Email'}))
+	phone = PhoneNumberField(widget=forms.TextInput(attrs={
+		'id':'floatingPhone','class': 'form-control ','placeholder':'Mobile Number'}))
 	
+	password1 = forms.CharField(widget=forms.PasswordInput(attrs={
+		'id':'floatingPass1','class': 'form-control ','placeholder':'Password1'}))
+	password2 = forms.CharField(widget=forms.PasswordInput(attrs={
+		'id':'floatingPass2','class': 'form-control ','placeholder':'Password2'}))
+
+	class Meta:
+		model = User
+		fields = ['username','email','phone','password1','password2']
+
+
+
+
 class DiaryForm(ModelForm):
 	class Meta:
 		model = Diary

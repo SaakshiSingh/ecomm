@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
-from .forms import CreateUserForm,DiaryForm,MoodForm,DateInputForm
+from .forms import *
 from .models import *
 from .filters import *
 from django.contrib.auth import authenticate,login,logout
@@ -23,42 +23,117 @@ from django.conf import settings
 from .utils import token_generator
 
 import boto3
+import random
+
+from twilio.rest import Client
+import razorpay
+
+from django.views.decorators.csrf import csrf_exempt
+@login_required(login_url='login')
+@csrf_exempt
+def success(request):
+	if(request.method=="POST"):
+		a=request.POST
+		print(a)
+	context={}
+	return render(request,'Account/payment_Success.html')
+
+@login_required(login_url='login')
+def payment(request):
+	client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET_KEY))
+	order_amount = 50000
+	order_currency = 'INR'
+
+	payment = client.order.create(dict(amount=order_amount, currency=order_currency,payment_capture=1))
+	payment_id = payment['id']
+
+	context={'api_key':settings.RAZORPAY_API_KEY,'order_id':payment_id}
+	return render(request,'Account/payment.html',context)
+def send_otp(mobile,otp):
+	account_sid = settings.ACCOUNT_SID
+	auth_token = settings.AUTH_TOKEN
+	client = Client(account_sid,auth_token)
+	message = client.messages.create(
+		body='Otp for MooDiary is'+str(otp),
+		from_ = settings.FROM_MOBILE,
+		to=str(mobile)
+	)
+
 @unauntheticated_user
 def home(request):
 	context ={'title':"MooDiary"}
 	return render(request,'Account/home.html',context)
 
+def send_verification_mail(name,send_to_email,pk,domain,user):
+	uidb64 = urlsafe_base64_encode(force_bytes(pk))
+	link = reverse('activate',kwargs={'uidb64':uidb64,'token':token_generator.make_token(user)})
+	activate_url ='http://'+domain+link
+	body = "Hello "+ name+ " You just registerd at our Digital Diary MooDiary. Please use the link to confirm Email for continuation.\n"+ activate_url
+	email = EmailMessage(
+		'Email Verification For MooDiary',
+		body,
+		settings.EMAIL_HOST_USER,
+		[send_to_email],
+		)
+	email.send(fail_silently =False)
+
 @unauntheticated_user
 def registerPage(request):
-	
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
+		
 		if form.is_valid():
+			check_useremail = User.objects.filter(email=request.POST.get('email')).first()
+			if check_useremail:
+				messages.error(request,'Account with this email already exists.')
+				return redirect('login')
+
+			check_userphone = Customer.objects.filter(phone=request.POST.get('phone')).first()
+			if check_userphone:
+				messages.error(request,'Account with this phone number already exists.')
+				return redirect('login')
+
 			user = form.save()
 			name = user.username
 			send_to_email = user.email
-			uidb64 = urlsafe_base64_encode(force_bytes(user.id))
-		
+			pk = user.id
 			domain = get_current_site(request).domain
+			send_verification_mail(name,send_to_email,pk,domain,user)
+			phone = form.cleaned_data.get('phone')
+			user.customer.phone = phone
+			otp = str(random.randint(100000,999999))
+			user.customer.otp = otp
+			user.save()
+			send_otp(phone,otp)
+			request.session['phone'] = str(phone)
 
-			link = reverse('activate',kwargs={'uidb64':uidb64,'token':token_generator.make_token(user)})
-			activate_url ='http://'+domain+link
-			body = "Hello "+ name+ " You just registerd at our Digital Diary MooDiary. Please use the link to confirm Email for continuation.\n"+ activate_url
-			email = EmailMessage(
-				'Email Verification For MooDiary',
-				body,
-				settings.EMAIL_HOST_USER,
-				[send_to_email],
-				)
-			email.send(fail_silently =False)
-		
-			messages.success(request,'Account successfully created')
-			return redirect('login')
+			#messages.success(request,'Account successfully created')
+			return redirect('otp')
 	else:
 		form = CreateUserForm()
+		
 	context ={'form':form}
 	return render(request,'Account/register.html',context)
+
+@unauntheticated_user
+def otp(request):
+	phone = request.session.get('phone')
+	print(phone)
+	if request.method =="POST":
+		otp = request.POST.get("otp")
+		obj = Customer.objects.filter(phone=phone).first()
+		if(obj.otp == otp):
+			print("YES")
+			messages.success(request,'Account successfully created')
+			obj.is_phone_verified=True
+			obj.save()
+			return redirect('login')
+		else:
+			print("NO")
+			messages.error(request,'Invalid OTP')
 	
+	context ={'phone':phone}
+	return render(request,'Account/otp.html',context)
 
 @unauntheticated_user
 def loginPage(request):
