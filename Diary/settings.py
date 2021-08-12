@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'django_celery_beat',
     'storages',
+    'phonenumber_field',
 ]
 INSTALLED_APPS_WITH_APPCONFIGS = ['Account',]
 
@@ -151,15 +152,17 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 
-
+ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
+AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
+FROM_MOBILE = os.environ.get('FROM_MOBILE')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 
 CELERY_IMPORTS = ('Account.tasks',)
@@ -205,4 +208,7 @@ AWS_S3_FILE_OVERWRITE = False
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+RAZORPAY_API_SECRET_KEY =os.environ.get('RAZORPAY_API_SECRET_KEY')
+RAZORPAY_API_KEY =os.environ.get('RAZORPAY_API_KEY')
 django_heroku.settings(locals())
+

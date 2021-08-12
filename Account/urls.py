@@ -7,6 +7,9 @@ urlpatterns = [
 
     path('',views.home,name = "home"),
     path('register/',views.registerPage,name="register"),
+    path('otp/',views.otp,name="otp"),
+    #path('payment/',views.payment,name="payment"),
+    #path('success/',views.success,name="success"),
     path('login/',views.loginPage,name="login"),
     path('logout/',views.logoutPage,name="logout"),
     path('userpage/',views.user_page,name="userpage"),
