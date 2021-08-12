@@ -14,6 +14,8 @@ MooDiary implements Amazon's Rekognition Machine Learning.
 <h4>Beautify your Diary Content using CkEditor</h4>
 <h4>Filtering the Diaries according to date-created title and content via django-filter library</h4>
 <h4>Data visualization using ZingCharts</h4>
+<h4>Email Verification during Registration</h4>
+<h4>Mobile Number Verification by sending OTP via Twilio</h4>
 
 <h3>Technology / Library Used</h3>
 <ul>  
@@ -23,6 +25,7 @@ MooDiary implements Amazon's Rekognition Machine Learning.
   <li>Amazon Rekognition Machine Learning API</li>
   <li> AWS (Amazon Web Services) S3 Buckets for storage </li>
   <li> Heroku for deployment</li>
+  <li>Twilio</li>
 </ul  
 
 
