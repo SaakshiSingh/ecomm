@@ -2,7 +2,7 @@
 
 MooDiary is a Digital Diary and mood tracking and evaluating web App developed in Django.
 
-Link for live app : https://mymoodiary.herokuapp.com/
+
 <h2>Key Features of the App</h2>
 <h4>Powered with AWS Rekognition API </h4>
 Using Machine Learning, MooDiary can detect your emotions in a selfie uploaded at the time of creation of diary.
