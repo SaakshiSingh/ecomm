@@ -10,6 +10,7 @@ MooDiary implements Amazon's Rekognition Machine Learning.
 
 <h4>Sendng Daily Reminders to write Diary using Celery</h4>
 <h4>CRUD Functionality</h4>
+<h4> Payment for premium account via Razorpay</h4>
 <h4>Storing the media on AWS Buckets</h4>
 <h4>Beautify your Diary Content using CkEditor</h4>
 <h4>Filtering the Diaries according to date-created title and content via django-filter library</h4>
