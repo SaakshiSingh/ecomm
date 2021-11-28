@@ -211,4 +211,3 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 RAZORPAY_API_SECRET_KEY =os.environ.get('RAZORPAY_API_SECRET_KEY')
 RAZORPAY_API_KEY =os.environ.get('RAZORPAY_API_KEY')
 django_heroku.settings(locals())
-

@@ -13,6 +13,7 @@ class Customer(models.Model):
 	is_email_verified = models.BooleanField(default=False,blank=True)
 	is_phone_verified = models.BooleanField(default=False,blank=True)
 	phone = PhoneNumberField(null=True)
+	payment_id = models.CharField(max_length=100,null=True,blank=True)
 	hasPremium = models.BooleanField(default=False,blank=True)
 
 

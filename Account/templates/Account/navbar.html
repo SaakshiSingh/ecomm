@@ -32,9 +32,11 @@
 
             <a href="{%url 'login'%}" class="nav-link btn mx-1 fs-5" role="button"><i class="bi bi-person-fill"></i> My Account</a>
             <a href="{%url 'register'%}" class="nav-link btn mx-1 fs-5" role="button"><i class="bi bi-person-fill"></i> Register</a>
-            {%else%}
             
-
+            {%else%}
+            {% if not request.user.customer.hasPremium%}
+            <a href="{%url 'payment'%}" class="nav-link btn mx-1 fs-5" role="button"><i class="bi bi-wallet2 mx-1 fs-5"></i> Get Premium</a>
+            {%endif%}
             <a href="{%url 'trackmood'%}" class="nav-link btn mx-1 fs-5" role="button"><i class="fa fa-smile-o" aria-hidden="true"></i> <i class="fa fa-frown-o" aria-hidden="true"></i></i> Track Mood</a>
             <a href="{%url 'creatediary'%}" class="nav-link btn mx-1 fs-5" role="button"><i class="bi bi-book-half" aria-hidden="true"></i> <i class="bi bi-pen" aria-hidden="true"></i></i> Write Diary</a>
             

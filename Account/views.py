@@ -34,7 +34,28 @@ from django.views.decorators.csrf import csrf_exempt
 def success(request):
 	if(request.method=="POST"):
 		a=request.POST
-		print(a)
+		order_id = ""
+		data = {}
+		for key,val in a.items():
+			if key == "razorpay_order_id":
+				data['razorpay_order_id'] = val
+			elif key == "razorpay_payment_id":
+				data['razorpay_payment_id'] = val
+			elif key == "razorpay_signature":
+				data['razorpay_signature'] =val
+				
+
+		customer = Customer.objects.filter(payment_id =data['razorpay_order_id']).first()
+		print(data)
+		
+		client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET_KEY))
+		
+		check = client.utility.verify_payment_signature(data)
+		if check:
+			return render(request,'Account/Error.html')
+
+		customer.hasPremium = True
+		customer.save()
 	context={}
 	return render(request,'Account/payment_Success.html')
 
@@ -43,12 +64,17 @@ def payment(request):
 	client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET_KEY))
 	order_amount = 50000
 	order_currency = 'INR'
-
 	payment = client.order.create(dict(amount=order_amount, currency=order_currency,payment_capture=1))
 	payment_id = payment['id']
+	customer = request.user.customer
 
-	context={'api_key':settings.RAZORPAY_API_KEY,'order_id':payment_id}
+	customer.payment_id = payment_id
+	customer.save()
+	
+	context={'api_key':settings.RAZORPAY_API_KEY,'order_id':payment_id,'order_amount':order_amount}
 	return render(request,'Account/payment.html',context)
+
+	
 def send_otp(mobile,otp):
 	account_sid = settings.ACCOUNT_SID
 	auth_token = settings.AUTH_TOKEN
